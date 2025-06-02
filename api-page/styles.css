@@ -1602,3 +1602,75 @@ input:checked + .slider:before {
         width: calc(100% - 40px);
     }
 }
+
+/* Tambahkan ini di bagian akhir file CSS */
+
+/* Header Title Style */
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+.header-title h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Dashboard Card Styles */
+.dashboard-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 40px;
+}
+
+.dashboard-card {
+    background: var(--card-background);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.dashboard-card h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Docs Page Styles */
+.language-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    background: var(--background-color);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.code-sample {
+    display: none;
+}
+
+.code-sample.active {
+    display: block;
+}
