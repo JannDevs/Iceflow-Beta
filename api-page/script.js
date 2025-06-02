@@ -2,19 +2,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Enhanced loading screen
     const loadingScreen = document.getElementById("loadingScreen");
     const body = document.body;
-    body.classList.add("no-scroll");
+    
+    // Hentikan scroll selama loading
+    body.style.overflow = 'hidden';
+    body.style.height = '100vh';
 
-    // Loading dots animation
-    const loadingDotsAnimation = setInterval(() => {
-        const loadingDots = document.querySelector(".loading-dots");
-        if (loadingDots) {
-            if (loadingDots.textContent === '...') {
-                loadingDots.textContent = '.';
-            } else {
-                loadingDots.textContent += '.';
-            }
-        }
-    }, 500);
+    // Animasi loading dots
+    const loadingDots = document.querySelector(".loading-dots");
+    let dotsInterval;
+    
+    if (loadingDots) {
+        dotsInterval = setInterval(() => {
+            loadingDots.textContent = loadingDots.textContent.length >= 3 ? 
+                '.' : loadingDots.textContent + '.';
+        }, 500);
+    }
+
+    // Pastikan loading screen hilang setelah semua konten dimuat
+    window.addEventListener('load', () => {
+        clearInterval(dotsInterval);
+        loadingScreen.style.opacity = '0';
+        loadingScreen.style.pointerEvents = 'none';
+        body.style.overflow = '';
+        body.style.height = '';
+        
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    });
+
+    // Fallback jika load event tidak terpicu
+    setTimeout(() => {
+        clearInterval(dotsInterval);
+        loadingScreen.style.display = 'none';
+        body.style.overflow = '';
+        body.style.height = '';
+    }, 3000);
 
     // Side navigation functionality
     const sideNav = document.querySelector('.side-nav');
