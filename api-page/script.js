@@ -125,21 +125,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         bsToast.show();
     };
 
+    // Show version toast on load
+    const versionToast = new bootstrap.Toast(document.getElementById('notificationToast'));
+    versionToast.show();
+
+    // Version toast click handler
+    document.getElementById('versionToast').addEventListener('click', function() {
+        versionToast.show();
+    });
+
+    // Toggle sidebar on menu click (mobile)
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.side-nav').classList.toggle('active');
+    });
+
+    // Close sidebar when clicking outside (mobile)
+    document.addEventListener('click', function(e) {
+        const sideNav = document.querySelector('.side-nav');
+        if (window.innerWidth < 992 && 
+            !e.target.closest('.side-nav') && 
+            !e.target.closest('.menu-toggle') && 
+            sideNav.classList.contains('active')) {
+            sideNav.classList.remove('active');
+        }
+    });
+
     // Theme toggle functionality
     const themeToggle = document.getElementById('themeToggle');
-    
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         themeToggle.checked = true;
     }
 
-    themeToggle.addEventListener('change', () => {
+    themeToggle.addEventListener('change', function() {
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDarkMode);
         
-        showToast(`Switched to ${isDarkMode ? 'dark' : 'light'} mode`, 'success');
+        // Show toast notification
+        const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
+        document.querySelector('.toast-body').textContent = 
+            `Switched to ${isDarkMode ? 'dark' : 'light'} mode`;
+        toast.show();
     });
+
+    // Hide loading screen
+    setTimeout(function() {
+        document.getElementById('loadingScreen').classList.add('fade-out');
+        setTimeout(function() {
+            document.getElementById('loadingScreen').style.display = "none";
+            document.body.classList.remove("no-scroll");
+        }, 500);
+    }, 1000);
 
     // Copy to clipboard functionality
     const copyToClipboard = (elementId) => {
