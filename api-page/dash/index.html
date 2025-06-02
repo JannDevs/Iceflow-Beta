@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Modern API Documentation with Cool Interface">
-    <link rel="icon" href="/src/icon.png" type="image/png">
-    <title id="page">Iceflow API - Dashboard</title>
+    <link rel="icon" href="../../src/icon.png" type="image/png">
+    <title>Iceflow API - Features</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loadingScreen">
         <div class="spinner-wrapper">
             <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100">
@@ -22,34 +21,41 @@
             <p>Loading<span class="loading-dots">...</span></p>
         </div>
     </div>
-
-    <!-- Side Navigation - Diubah -->
+    
     <aside class="side-nav">
         <div class="side-nav-logo">
             <span>Iceflow API</span>
-            <div class="badge-pill">v1.0</div>
+            <div class="badge-pill">v1.1.7</div>
         </div>
         
         <nav class="side-nav-links">
-            <a href="/" class="side-nav-link active">
+            <a href="../" class="side-nav-link active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="/api/" class="side-nav-link">
+            <a href="../api/" class="side-nav-link">
                 <i class="fas fa-plug"></i>
                 <span>API</span>
             </a>
-            <a href="/docs/" class="side-nav-link">
+            <a href="../docs/" class="side-nav-link">
                 <i class="fas fa-book"></i>
                 <span>Documentation</span>
             </a>
-            <a href="/dash/" class="side-nav-link">
+            <a href="../dash/" class="side-nav-link">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
+            <a href="../stats/" class="side-nav-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Statistics</span>
+            </a>
         </nav>
+        
+        <div class="nav-collapse-btn" aria-label="Toggle navigation">
+            <i class="fas fa-angle-left"></i>
+        </div>
     </aside>
-
+    
     <main class="main-wrapper">
         <header class="main-header">
             <button class="menu-toggle">
@@ -58,25 +64,23 @@
             
             <div class="header-title">
                 <h1>Iceflow API</h1>
-                <div class="badge-pill">v1.0</div>
+                <div class="badge-pill">v1.1.7</div>
             </div>
         </header>
         
-        <section class="dashboard-section">
-            <!-- Card 1: Device Info -->
+        section class="dashboard-section">
             <div class="dashboard-card">
                 <h2><i class="fas fa-laptop"></i> Your Device Info</h2>
                 <div class="card-content">
-                    <p><strong>Browser:</strong> Safari</p>
-                    <p><strong>OS:</strong> macOS</p>
-                    <p><strong>Screen:</strong> 375x667</p>
-                    <p><strong>IP Address:</strong> 180.252.****.**</p>
-                    <p><strong>Location:</strong> Bekasi, Indonesia</p>
-                    <p><strong>Connection:</strong> Unknown</p>
+                    <p><strong>Browser:</strong> <span id="userBrowser">Loading...</span></p>
+                    <p><strong>OS:</strong> <span id="userOS">Loading...</span></p>
+                    <p><strong>Screen:</strong> <span id="userScreen">Loading...</span></p>
+                    <p><strong>IP Address:</strong> <span id="userIP">Loading...</span></p>
+                    <p><strong>Location:</strong> <span id="userLocation">Loading...</span></p>
+                    <p><strong>Connection:</strong> <span id="userConnection">Loading...</span></p>
                 </div>
             </div>
 
-            <!-- Card 2: Rules & Terms -->
             <div class="dashboard-card">
                 <h2><i class="fas fa-gavel"></i> Rules & Terms</h2>
                 <div class="card-content">
@@ -91,14 +95,54 @@
                 </div>
             </div>
 
-            <!-- Card 3-6 lainnya dengan konten dari gambar -->
-            <!-- ... -->
+            <div class="dashboard-card">
+                <h2><i class="fas fa-chart-line"></i> Usage Guidelines</h2>
+                <div class="card-content">
+                    <ul>
+                        <li><strong>Rate Limit:</strong> 10 requests per detik, 60 per menit, 100K per hari</li>
+                        <li><strong>Timeout:</strong> Request akan timeout setelah 30 detik</li>
+                        <li><strong>Fair Use:</strong> Gunakan secukupnya dan bijak</li>
+                        <li><strong>Attribution:</strong> Credit ke Iceflow API dihargai</li>
+                        <li><strong>Uptime:</strong> 99% uptime, maintenance berkala</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h2><i class="fas fa-shield-alt"></i> Security & Privacy</h2>
+                <div class="card-content">
+                    <ul>
+                        <li><strong>Data Logging:</strong> Kami log IP, endpoint, dan timestamp untuk monitoring</li>
+                        <li><strong>No Personal Data:</strong> Kami tidak menyimpan data pribadi users</li>
+                        <li><strong>IP Blocking:</strong> IP yang melanggar akan diblokir otomatis</li>
+                        <li><strong>SSL/TLS:</strong> Semua request menggunakan HTTPS</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h2><i class="fas fa-headset"></i> Contact & Support</h2>
+                <div class="card-content">
+                    <ul>
+                        <li><strong>Issues:</strong> Laporkan bug atau masalah via Email</li>
+                        <li><strong>Feature Request:</strong> Saran fitur baru sangat diterima</li>
+                        <li><strong>Support:</strong> Response dalam 24–48 jam</li>
+                        <li><strong>Updates:</strong> Follow whatsapp channel untuk update terbaru</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h2><i class="fas fa-exclamation-triangle"></i> Disclaimer</h2>
+                <div class="card-content">
+                    <p>Dengan menggunakan API ini, Anda setuju dengan semua terms & conditions di atas. Pelanggaran dapat berakibat pada pemblokiran akses secara permanent.</p>
+                </div>
+            </div>
         </section>
         
-        <!-- Footer -->
         <footer class="main-footer">
             <div class="footer-content">
-                <div id="wm" class="copyright"></div>
+                <div class="copyright">© 2023 Iceflow API. All rights reserved.</div>
                 
                 <div class="footer-middle">
                     <div class="theme-switcher">
@@ -125,9 +169,50 @@
         </footer>
     </main>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/script.js"></script>
+    <script src="../script.js"></script>
+    <script>
+        // Detect user device info
+        document.addEventListener('DOMContentLoaded', () => {
+            // Browser detection
+            const userAgent = navigator.userAgent;
+            let browserName;
+            if (userAgent.includes("Firefox")) browserName = "Firefox";
+            else if (userAgent.includes("Safari")) browserName = "Safari";
+            else if (userAgent.includes("Chrome")) browserName = "Chrome";
+            else if (userAgent.includes("Edge")) browserName = "Edge";
+            else browserName = "Unknown";
+            
+            // OS detection
+            let osName = "Unknown";
+            if (userAgent.includes("Windows")) osName = "Windows";
+            else if (userAgent.includes("Mac")) osName = "macOS";
+            else if (userAgent.includes("Linux")) osName = "Linux";
+            else if (userAgent.includes("Android")) osName = "Android";
+            else if (userAgent.includes("iOS")) osName = "iOS";
+            
+            // Screen resolution
+            const screenRes = `${window.screen.width}x${window.screen.height}`;
+            
+            document.getElementById('userBrowser').textContent = browserName;
+            document.getElementById('userOS').textContent = osName;
+            document.getElementById('userScreen').textContent = screenRes;
+            
+            // Get IP and location (using free API)
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userIP').textContent = data.ip || 'Unknown';
+                    document.getElementById('userLocation').textContent = 
+                        `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
+                });
+            
+            // Connection type
+            const connectionType = navigator.connection ? 
+                (navigator.connection.effectiveType || 'Unknown') : 'Unknown';
+            document.getElementById('userConnection').textContent = connectionType;
+        });
+    </script>
 </body>
 </html>
