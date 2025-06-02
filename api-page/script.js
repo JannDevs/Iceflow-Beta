@@ -174,22 +174,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Theme toggle functionality
-    const themeToggle = document.getElementById('themeToggle');
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        themeToggle.checked = true;
-    }
+const themeToggle = document.getElementById('themeToggle');
+const storedTheme = localStorage.getItem('theme') || 
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-    themeToggle.addEventListener('change', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDarkMode);
-        
-        // Show toast notification
-        const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
-        document.querySelector('.toast-body').textContent = 
-            `Switched to ${isDarkMode ? 'dark' : 'light'} mode`;
-        toast.show();
+if (storedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.checked = true;
+}
+
+themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+        }
     });
 
     // Hide loading screen
