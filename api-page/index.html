@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <!-- Loading Screen 
+    <!-- Loading Screen -->
     <div id="loadingScreen">
         <div class="spinner-wrapper">
             <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100">
@@ -21,9 +21,9 @@
             </svg>
             <p>Loading<span class="loading-dots">...</span></p>
         </div>
-    </div> -->
-    
-    <!-- Side Navigation -->
+    </div>
+
+    <!-- Side Navigation 
     <aside class="side-nav">
         <div class="side-nav-logo">
             <span id="sideNavName">API</span>
@@ -33,13 +33,13 @@
         <nav class="side-nav-links">
             <a href="#" class="side-nav-link active">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Dashboard</span>
             </a>
             <a href="/api/" class="side-nav-link">
                 <i class="fas fa-plug"></i>
                 <span>Features</span>
             </a>
-            <a href="/docs/" class="side-nav-link">
+            <a href="/docs" class="side-nav-link">
                 <i class="fas fa-book"></i>
                 <span>Documentation</span>
             </a>
@@ -52,7 +52,7 @@
         <div class="nav-collapse-btn" aria-label="Toggle navigation">
             <i class="fas fa-angle-left"></i>
         </div>
-    </aside>
+    </aside> -->
 
     <!-- Main Content -->
     <main class="main-wrapper">
@@ -89,14 +89,7 @@
                 
                 <p id="description" class="hero-description"></p>
                 
-                <div class="hero-actions">
-                    <a href="/api/" class="btn btn-primary">
-                        <i class="fas fa-rocket"></i> Get Started
-                    </a>
-                    <a href="/docs/" class="btn btn-primary">
-                        <i class="fas fa-book"></i> Documentation
-                    </a>
-                </div>
+                <div id="apiLinks" class="hero-actions"></div>
             </div>
             
             <div class="hero-visual">
