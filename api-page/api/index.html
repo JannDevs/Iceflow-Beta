@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Modern API Documentation with Cool Interface">
-    <link rel="icon" href="/src/icon.png" type="image/png">
-    <title id="page">Iceflow API - Features</title>
+    <link rel="icon" href="./src/icon.png" type="image/png">
+    <title>Iceflow API</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loadingScreen">
         <div class="spinner-wrapper">
             <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100">
@@ -22,35 +21,41 @@
             <p>Loading<span class="loading-dots">...</span></p>
         </div>
     </div>
-
-    <!-- Side Navigation - Diubah -->
+    
     <aside class="side-nav">
         <div class="side-nav-logo">
             <span>Iceflow API</span>
-            <div class="badge-pill">v1.0</div>
+            <div class="badge-pill">v1.1.7</div>
         </div>
         
         <nav class="side-nav-links">
-            <a href="/" class="side-nav-link active">
+            <a href="./" class="side-nav-link active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="/api/" class="side-nav-link">
+            <a href="./api/" class="side-nav-link">
                 <i class="fas fa-plug"></i>
                 <span>API</span>
             </a>
-            <a href="/docs/" class="side-nav-link">
+            <a href="./docs/" class="side-nav-link">
                 <i class="fas fa-book"></i>
                 <span>Documentation</span>
             </a>
-            <a href="/dash/" class="side-nav-link">
+            <a href="./dash/" class="side-nav-link">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
+            <a href="./stats/" class="side-nav-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Statistics</span>
+            </a>
         </nav>
+        
+        <div class="nav-collapse-btn" aria-label="Toggle navigation">
+            <i class="fas fa-angle-left"></i>
+        </div>
     </aside>
-
-    <!-- Main Content - Diubah -->
+    
     <main class="main-wrapper">
         <header class="main-header">
             <button class="menu-toggle">
@@ -59,7 +64,7 @@
             
             <div class="header-title">
                 <h1>Iceflow API</h1>
-                <div class="badge-pill">v1.0</div>
+                <div class="badge-pill">v1.1.7</div>
             </div>
         </header>
         
@@ -68,14 +73,13 @@
             <p class="section-description">Explore our collection of powerful and easy-to-use APIs</p>
             
             <div class="tab-content" id="apiContent">
-                <!-- Konten API akan diisi oleh script.js -->
+                <!-- Will be filled by script.js -->
             </div>
         </section>
         
-        <!-- Footer -->
         <footer class="main-footer">
             <div class="footer-content">
-                <div id="wm" class="copyright"></div>
+                <div class="copyright">© 2023 Iceflow API. All rights reserved.</div>
                 
                 <div class="footer-middle">
                     <div class="theme-switcher">
@@ -102,9 +106,8 @@
         </footer>
     </main>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
