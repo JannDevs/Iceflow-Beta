@@ -12,51 +12,82 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <!-- Side Navigation - Diubah -->
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="spinner-wrapper">
+            <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100">
+                <circle class="spinner-path" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
+                <circle class="spinner-animation" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
+            </svg>
+            <p>Loading<span class="loading-dots">...</span></p>
+        </div>
+    </div>
+
+    <!-- Side Navigation -->
     <aside class="side-nav">
         <div class="side-nav-logo">
-            <span>Iceflow API</span>
-            <div class="badge-pill">v1.0</div>
+            <span id="sideNavName">API</span>
+            <div id="versionHeader" class="badge-pill"></div>
         </div>
         
         <nav class="side-nav-links">
-            <a href="/" class="side-nav-link active">
+            <a href="#home" class="side-nav-link active">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Dashboard</span>
             </a>
-            <a href="/api/" class="side-nav-link">
+            <a href="#apis" class="side-nav-link">
                 <i class="fas fa-plug"></i>
-                <span>API</span>
+                <span>Features</span>
             </a>
-            <a href="/docs/" class="side-nav-link">
+            <a href="#docs" class="side-nav-link">
                 <i class="fas fa-book"></i>
                 <span>Documentation</span>
             </a>
-            <a href="/dash/" class="side-nav-link">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
+            <a href="https://github.com/FlowFalcon" target="_blank" class="side-nav-link">
+                <i class="fab fa-github"></i>
+                <span>Source Code</span>
             </a>
         </nav>
+        
+        <div class="nav-collapse-btn" aria-label="Toggle navigation">
+            <i class="fas fa-angle-left"></i>
+        </div>
     </aside>
 
-    <!-- Main Content - Diubah -->
+    <!-- Main Content -->
     <main class="main-wrapper">
         <header class="main-header">
             <button class="menu-toggle">
                 <i class="fas fa-bars"></i>
             </button>
             
-            <div class="header-title">
-                <h1>Iceflow API</h1>
-                <div class="badge-pill">v1.0</div>
+            <div class="search-container">
+                <div class="input-group">
+                    <span class="input-group-text" aria-hidden="true"><i class="fas fa-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search API..." aria-label="Search API">
+                    <button class="clear-search" id="clearSearch" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="notification-bell" aria-label="Notifications">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">6</span>
+                </div>
             </div>
         </header>
         
-        <!-- Hero Section - Diubah -->
-        <section class="hero-section">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
             <div class="hero-content">
-                <h1 class="gradient-text">Iceflow API</h1>
-                <p class="hero-description">Unlock the power of seamless integration with our comprehensive Koyuki Iceflow API suite. Designed for developers, by developers.</p>
+                <div class="hero-heading">
+                    <h1 id="name" class="gradient-text"></h1>
+                    <div id="version" class="badge-pill"></div>
+                </div>
+                
+                <p id="description" class="hero-description"></p>
                 
                 <div class="hero-actions">
                     <a href="/api/" class="btn btn-primary">
@@ -70,8 +101,11 @@
             
             <div class="hero-visual">
                 <div class="banner-container">
-                    <img class="banner" src="/api/src/banner.png" alt="Iceflow API">
+                    <img id="dynamicImage" class="banner" src="/api/src/banner.png" alt="Koyuki Iceflow">
                 </div>
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
             </div>
         </section>
         
