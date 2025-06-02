@@ -12,26 +12,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <aside class="side-nav collapsed">
-        <div class="side-nav-logo">
-            <img src="../src/icon.png" alt="Iceflow Logo" class="nav-logo">
+    <!-- Perubahan di index.html -->
+<aside class="side-nav">
+    <div class="side-nav-header">
+        <img src="../src/icon.png" alt="Iceflow Logo" class="nav-logo">
+        <div class="nav-collapse-btn">
+            <i class="fas fa-angle-left"></i>
         </div>
-        
-        <nav class="side-nav-links">
-            <a href="/dash/" class="side-nav-link" title="Dashboard">
-                <i class="fas fa-tachometer-alt"></i>
-            </a>
-            <a href="/api/" class="side-nav-link" title="API Features">
-                <i class="fas fa-plug"></i>
-            </a>
-            <a href="/stats/" class="side-nav-link" title="Statistics">
-                <i class="fas fa-chart-line"></i>
-            </a>
-            <a href="https://github.com/FlowFalcon" target="_blank" class="side-nav-link" title="Source Code">
-                <i class="fab fa-github"></i>
-            </a>
-        </nav>
-    </aside>
+    </div>
+    
+    <nav class="side-nav-links">
+        <a href="/dash/" class="side-nav-link" title="Dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+        </a>
+        <!-- Link lainnya... -->
+    </nav>
+
+    <div class="side-nav-footer">
+        <a href="https://github.com/FlowFalcon" target="_blank" class="side-nav-link" title="Source Code">
+            <i class="fab fa-github"></i>
+        </a>
+    </div>
+</aside>
 
     <main class="main-wrapper nav-collapsed">
         <header class="main-header">
