@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             body.style.overflow = '';
             body.style.height = '';
         }, 500);
+        
+        // Initialize lazy loading
+        lazyLoadImages();
     });
 
     // Fallback if load event doesn't trigger
@@ -31,104 +34,79 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadingScreen.style.display = 'none';
         body.style.overflow = '';
         body.style.height = '';
+        lazyLoadImages();
     }, 3000);
     
-    // ===== LAZY LOADING =====
-    const lazyLoadObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('in-view');
-                lazyLoadObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.api-item:not(.in-view)').forEach(item => {
-        lazyLoadObserver.observe(item);
-    });
-
-    // ===== SIDEBAR & NAVIGATION =====
-    const sideNav = document.querySelector('.side-nav');
-    const mainWrapper = document.querySelector('.main-wrapper');
-    const navCollapseBtn = document.querySelector('.nav-collapse-btn');
-    const menuToggle = document.querySelector('.menu-toggle');
+    // ===== NAV TOGGLE =====
+    const navToggle = document.getElementById('navToggle');
+    const navDropdown = document.getElementById('navDropdown');
     
-    // Toggle sidebar collapse
-    if (navCollapseBtn) {
-        navCollapseBtn.addEventListener('click', () => {
-            sideNav.classList.toggle('collapsed');
-            document.querySelector('.main-wrapper').classList.toggle('nav-collapsed');
+    if (navToggle && navDropdown) {
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navDropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            navDropdown.classList.remove('show');
         });
     }
     
-    navCollapseBtn.addEventListener('click', () => {
-        sideNav.classList.toggle('collapsed');
-        mainWrapper.classList.toggle('nav-collapsed');
-    });
-    
-    menuToggle.addEventListener('click', () => {
-        sideNav.classList.toggle('active');
-    });
-    
-    // Close side nav when clicking outside on mobile
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth < 992 && 
-            !e.target.closest('.side-nav') && 
-            !e.target.closest('.menu-toggle') && 
-            sideNav.classList.contains('active')) {
-            sideNav.classList.remove('active');
-        }
-    });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('.side-nav-link').forEach(link => {
-        if (link.getAttribute('href').startsWith('#')) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth' 
-                    });
-                    
-                    // Update active link
-                    document.querySelectorAll('.side-nav-link').forEach(l => {
-                        l.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Close side nav on mobile
-                    if (window.innerWidth < 992) {
-                        sideNav.classList.remove('active');
-                    }
-                }
-            });
-        }
-    });
-    
-    // Update active nav link on scroll
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY;
+    // ===== DARK MODE =====
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        // Check saved theme or prefer color scheme
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        document.querySelectorAll('section[id]').forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                document.querySelectorAll('.side-nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
             }
         });
-    });
+    }
 
-    // Toast notification system
+    // ===== LAZY LOAD IMAGES =====
+    function lazyLoadImages() {
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        
+        const lazyImageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const lazyImage = entry.target;
+                    lazyImage.classList.add('loaded');
+                    
+                    // If the image hasn't loaded yet, force load
+                    if (!lazyImage.complete) {
+                        lazyImage.onload = () => {
+                            lazyImage.classList.add('loaded');
+                        };
+                        lazyImage.onerror = () => {
+                            console.error('Failed to load image:', lazyImage.src);
+                        };
+                    }
+                    
+                    lazyImageObserver.unobserve(lazyImage);
+                }
+            });
+        });
+        
+        lazyImages.forEach(lazyImage => {
+            lazyImageObserver.observe(lazyImage);
+        });
+    }
+
+    // ===== TOAST NOTIFICATION =====
     const showToast = (message, type = 'info') => {
         const toast = document.getElementById('notificationToast');
         const toastBody = toast.querySelector('.toast-body');
@@ -164,319 +142,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         bsToast.show();
     };
 
-    // ===== VERSION TOAST =====
-    const versionToast = document.getElementById('versionToast');
-    if (versionToast) {
-        versionToast.addEventListener('click', () => {
-            const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
-            toast.show();
-        });
-    }
-
-    // Toggle sidebar on menu click (mobile)
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-        document.querySelector('.side-nav').classList.toggle('active');
-    });
-
-    // Close sidebar when clicking outside (mobile)
-    document.addEventListener('click', function(e) {
-        const sideNav = document.querySelector('.side-nav');
-        if (window.innerWidth < 992 && 
-            !e.target.closest('.side-nav') && 
-            !e.target.closest('.menu-toggle') && 
-            sideNav.classList.contains('active')) {
-            sideNav.classList.remove('active');
-        }
-    });
-
-    // ===== DARK MODE =====
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        // Check saved theme or prefer color scheme
-        const savedTheme = localStorage.getItem('theme') || 
-            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeToggle.checked = true;
-        }
-
-        themeToggle.addEventListener('change', function() {
-            if (this.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    }
-
-    // Hide loading screen
-    setTimeout(function() {
-        document.getElementById('loadingScreen').classList.add('fade-out');
-        setTimeout(function() {
-            document.getElementById('loadingScreen').style.display = "none";
-            document.body.classList.remove("no-scroll");
-        }, 500);
-    }, 1000);
-
-    // Copy to clipboard functionality
-    const copyToClipboard = (elementId) => {
-        const element = document.getElementById(elementId);
-        const text = element.textContent;
-        
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = elementId === 'apiEndpoint' ? 
-                document.getElementById('copyEndpoint') : 
-                document.getElementById('copyResponse');
-            
-            btn.innerHTML = '<i class="fas fa-check"></i>';
-            btn.classList.add('copy-success');
-            
-            showToast('Copied to clipboard successfully!', 'success');
-            
-            setTimeout(() => {
-                btn.innerHTML = '<i class="far fa-copy"></i>';
-                btn.classList.remove('copy-success');
-            }, 1500);
-        }).catch(err => {
-            showToast('Failed to copy text: ' + err, 'error');
-        });
-    };
-    
-    // Initialize tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    // Load API content if on API page
-    if (window.location.pathname.includes('/api/')) {
-        try {
-            const settingsResponse = await fetch('../src/settings.json');
-            if (!settingsResponse.ok) throw new Error('Failed to load settings');
-            const settings = await settingsResponse.json();
-            
-            const apiContent = document.getElementById('apiContent');
-            if (!settings.categories || !settings.categories.length) {
-                apiContent.innerHTML = `
-                    <div class="no-results-message">
-                        <i class="fas fa-database"></i>
-                        <p>No API categories found</p>
-                        <button class="btn btn-primary" onclick="location.reload()">
-                            <i class="fas fa-sync-alt"></i> Refresh
-                        </button>
-                    </div>
-                `;
-            } else {
-                settings.categories.forEach((category, categoryIndex) => {
-                    const sortedItems = category.items.sort((a, b) => a.name.localeCompare(b.name));
-                    
-                    const categoryElement = document.createElement('div');
-                    categoryElement.className = 'category-section';
-                    categoryElement.style.animationDelay = `${categoryIndex * 0.2}s`;
-                    
-                    const categoryHeader = document.createElement('h3');
-                    categoryHeader.className = 'category-header';
-                    categoryHeader.textContent = category.name;
-                    
-                    if (category.icon) {
-                        const icon = document.createElement('i');
-                        icon.className = category.icon;
-                        icon.style.color = 'var(--primary-color)';
-                        categoryHeader.prepend(icon);
-                    }
-                    
-                    categoryElement.appendChild(categoryHeader);
-                    
-                    const itemsRow = document.createElement('div');
-                    itemsRow.className = 'row';
-                    
-                    sortedItems.forEach((item, index) => {
-                        const itemCol = document.createElement('div');
-                        itemCol.className = 'col-md-6 col-lg-4 api-item';
-                        itemCol.dataset.name = item.name;
-                        itemCol.dataset.desc = item.desc;
-                        itemCol.dataset.category = category.name;
-                        itemCol.style.animationDelay = `${index * 0.05 + 0.3}s`;
-                        
-                        const heroSection = document.createElement('div');
-                        heroSection.className = 'hero-section';
-                        
-                        const infoDiv = document.createElement('div');
-                        
-                        const itemTitle = document.createElement('h5');
-                        itemTitle.className = 'mb-0';
-                        itemTitle.textContent = item.name;
-                        
-                        const itemDesc = document.createElement('p');
-                        itemDesc.className = 'text-muted mb-0';
-                        itemDesc.textContent = item.desc;
-                        
-                        infoDiv.appendChild(itemTitle);
-                        infoDiv.appendChild(itemDesc);
-                        
-                        const actionsDiv = document.createElement('div');
-                        actionsDiv.className = 'api-actions';
-                        
-                        const getBtn = document.createElement('button');
-                        getBtn.className = 'btn get-api-btn';
-                        getBtn.innerHTML = '<i class="fas fa-code"></i> GET';
-                        getBtn.dataset.apiPath = item.path;
-                        getBtn.dataset.apiName = item.name;
-                        getBtn.dataset.apiDesc = item.desc;
-                        getBtn.setAttribute('aria-label', `Get ${item.name} API`);
-                        
-                        const status = item.status || "ACTIVE";
-                        let statusClass, statusIcon, statusTooltip;
-                        
-                        switch(status) {
-                            case "ERROR":
-                                statusClass = "status-error";
-                                statusIcon = "fa-circle-xmark";
-                                statusTooltip = "This feature has errors";
-                                break;
-                            case "MAINTENANCE":
-                                statusClass = "status-maintenance";
-                                statusIcon = "fa-circle-down";
-                                statusTooltip = "This feature has maintenance";
-                                break;
-                            case "NEW":
-                                statusClass = "status-new";
-                                statusIcon = "fa-circle-plus";
-                                statusTooltip = "This feature was added";
-                                break;
-                            case "UPDATE":
-                                statusClass = "status-update";
-                                statusIcon = "fa-circle-up";
-                                statusTooltip = "New update available on this feature";
-                                break;
-                            default: // "ACTIVE"
-                                statusClass = "status-active";
-                                statusIcon = "fa-circle-check";
-                                statusTooltip = "This feature is active";
-                        }
-                        
-                        const statusIndicator = document.createElement('div');
-                        statusIndicator.classList.add('api-status', statusClass);
-                        statusIndicator.setAttribute('title', statusTooltip);
-                        statusIndicator.setAttribute('data-bs-toggle', 'tooltip');
-                        
-                        const icon = document.createElement('i');
-                        icon.className = `fas ${statusIcon}`;
-                        statusIndicator.appendChild(icon);
-                        
-                        const statusText = document.createElement('span');
-                        statusText.textContent = status;
-                        statusIndicator.appendChild(statusText);
-                        
-                        actionsDiv.appendChild(getBtn);
-                        actionsDiv.appendChild(statusIndicator);
-                        
-                        heroSection.appendChild(infoDiv);
-                        heroSection.appendChild(actionsDiv);
-                        
-                        itemCol.appendChild(heroSection);
-                        itemsRow.appendChild(itemCol);
-                    });
-                    
-                    categoryElement.appendChild(itemsRow);
-                    apiContent.appendChild(categoryElement);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading API content:', error);
-            showToast('Failed to load API content', 'error');
-        }
-    }
-    
-    // ===== API SEARCH FUNCTIONALITY =====
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('.api-item').forEach(item => {
-                const name = item.dataset.name.toLowerCase();
-                const desc = item.dataset.desc.toLowerCase();
-                item.style.display = (name.includes(searchTerm) || desc.includes(searchTerm)) 
-                    ? 'block' 
-                    : 'none';
-            });
-        });
-    }
-    
-    // ===== DEVICE INFO =====
-    if (document.getElementById('userOS')) {
-        // Browser detection
-        const userAgent = navigator.userAgent;
-        let browserName = 'Unknown';
-        
-        if (userAgent.includes("Firefox")) browserName = "Firefox";
-        else if (userAgent.includes("Safari")) browserName = "Safari";
-        else if (userAgent.includes("Chrome")) browserName = "Chrome";
-        else if (userAgent.includes("Edg")) browserName = "Edge";
-        
-        // OS detection
-        let osName = "Unknown";
-        if (userAgent.includes("Windows")) osName = "Windows";
-        else if (userAgent.includes("Mac")) osName = "macOS";
-        else if (userAgent.includes("Linux")) osName = "Linux";
-        else if (userAgent.includes("Android")) osName = "Android";
-        else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) osName = "iOS";
-        
-        // Update UI
-        document.getElementById('userBrowser').textContent = browserName;
-        document.getElementById('userOS').textContent = osName;
-        document.getElementById('userScreen').textContent = 
-            `${window.screen.width} × ${window.screen.height}`;
-        
-        // Get IP and location
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('userIP').textContent = data.ip || 'Unknown';
-                document.getElementById('userLocation').textContent = 
-                    `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
-            });
-        
-        // Connection info
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (connection) {
-            document.getElementById('userConnection').textContent = 
-                `${connection.effectiveType} (${connection.downlink} Mbps)`;
-        }
-    }
-
-    // Hide loading screen
+    // Show welcome toast
     setTimeout(() => {
-        loadingScreen.classList.add('fade-out');
-        
-        setTimeout(() => {
-            loadingScreen.style.display = "none";
-            body.classList.remove("no-scroll");
-            clearInterval(loadingDotsAnimation);
-        }, 500);
-    }, 1000);
+        showToast('Welcome to Iceflow API');
+    }, 1500);
+
+    // ===== SIDEBAR TOGGLE FOR MOBILE =====
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sideNav = document.querySelector('.side-nav');
     
-    // Animate in API items as they come into view
-    const observeElements = () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1
+    if (menuToggle && sideNav) {
+        menuToggle.addEventListener('click', () => {
+            sideNav.classList.toggle('active');
         });
         
-        document.querySelectorAll('.api-item:not(.in-view)').forEach(item => {
-            observer.observe(item);
+        // Close side nav when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 992 && 
+                !e.target.closest('.side-nav') && 
+                !e.target.closest('.menu-toggle') && 
+                sideNav.classList.contains('active')) {
+                sideNav.classList.remove('active');
+            }
         });
-    };
-    
-    observeElements();
-    window.addEventListener('resize', observeElements);
+    }
 });
