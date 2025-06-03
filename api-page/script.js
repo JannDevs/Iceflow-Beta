@@ -1,49 +1,65 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Enhanced loading screen
+    // ===== LOADING SCREEN =====
     const loadingScreen = document.getElementById("loadingScreen");
     const body = document.body;
     
-    // Hentikan scroll selama loading
+    // Block scroll during loading
     body.style.overflow = 'hidden';
     body.style.height = '100vh';
 
-    // Animasi loading dots
+    // Loading dots animation
     const loadingDots = document.querySelector(".loading-dots");
-    let dotsInterval;
-    
-    if (loadingDots) {
-        dotsInterval = setInterval(() => {
-            loadingDots.textContent = loadingDots.textContent.length >= 3 ? 
-                '.' : loadingDots.textContent + '.';
-        }, 500);
-    }
+    let dotsInterval = setInterval(() => {
+        loadingDots.textContent = loadingDots.textContent.length >= 3 ? 
+            '.' : loadingDots.textContent + '.';
+    }, 500);
 
-    // Pastikan loading screen hilang setelah semua konten dimuat
+    // Hide loading screen when everything is loaded
     window.addEventListener('load', () => {
         clearInterval(dotsInterval);
-        loadingScreen.style.opacity = '0';
-        loadingScreen.style.pointerEvents = 'none';
-        body.style.overflow = '';
-        body.style.height = '';
-        
+        loadingScreen.classList.add('fade-out');
         setTimeout(() => {
             loadingScreen.style.display = 'none';
+            body.style.overflow = '';
+            body.style.height = '';
         }, 500);
     });
 
-    // Fallback jika load event tidak terpicu
+    // Fallback if load event doesn't trigger
     setTimeout(() => {
         clearInterval(dotsInterval);
         loadingScreen.style.display = 'none';
         body.style.overflow = '';
         body.style.height = '';
     }, 3000);
+    
+    // ===== LAZY LOADING =====
+    const lazyLoadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                lazyLoadObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
 
-    // Side navigation functionality
+    document.querySelectorAll('.api-item:not(.in-view)').forEach(item => {
+        lazyLoadObserver.observe(item);
+    });
+
+    // ===== SIDEBAR & NAVIGATION =====
     const sideNav = document.querySelector('.side-nav');
     const mainWrapper = document.querySelector('.main-wrapper');
     const navCollapseBtn = document.querySelector('.nav-collapse-btn');
     const menuToggle = document.querySelector('.menu-toggle');
+    
+    // Toggle sidebar collapse
+    if (navCollapseBtn) {
+        navCollapseBtn.addEventListener('click', () => {
+            sideNav.classList.toggle('collapsed');
+            document.querySelector('.main-wrapper').classList.toggle('nav-collapsed');
+        });
+    }
     
     navCollapseBtn.addEventListener('click', () => {
         sideNav.classList.toggle('collapsed');
@@ -148,14 +164,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         bsToast.show();
     };
 
-    // Show version toast on load
-    const versionToast = new bootstrap.Toast(document.getElementById('notificationToast'));
-    versionToast.show();
-
-    // Version toast click handler
-    document.getElementById('versionToast').addEventListener('click', function() {
-        versionToast.show();
-    });
+    // ===== VERSION TOAST =====
+    const versionToast = document.getElementById('versionToast');
+    if (versionToast) {
+        versionToast.addEventListener('click', () => {
+            const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
+            toast.show();
+        });
+    }
 
     // Toggle sidebar on menu click (mobile)
     document.querySelector('.menu-toggle').addEventListener('click', function() {
@@ -173,25 +189,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Theme toggle functionality
-const themeToggle = document.getElementById('themeToggle');
-const storedTheme = localStorage.getItem('theme') || 
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-if (storedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.checked = true;
-}
-
-themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('theme', 'light');
+    // ===== DARK MODE =====
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        // Check saved theme or prefer color scheme
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.checked = true;
         }
-    });
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    }
 
     // Hide loading screen
     setTimeout(function() {
@@ -235,7 +254,7 @@ themeToggle.addEventListener('change', function() {
     // Load API content if on API page
     if (window.location.pathname.includes('/api/')) {
         try {
-            const settingsResponse = await fetch('/src/settings.json');
+            const settingsResponse = await fetch('../src/settings.json');
             if (!settingsResponse.ok) throw new Error('Failed to load settings');
             const settings = await settingsResponse.json();
             
@@ -369,6 +388,63 @@ themeToggle.addEventListener('change', function() {
         } catch (error) {
             console.error('Error loading API content:', error);
             showToast('Failed to load API content', 'error');
+        }
+    }
+    
+    // ===== API SEARCH FUNCTIONALITY =====
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.api-item').forEach(item => {
+                const name = item.dataset.name.toLowerCase();
+                const desc = item.dataset.desc.toLowerCase();
+                item.style.display = (name.includes(searchTerm) || desc.includes(searchTerm)) 
+                    ? 'block' 
+                    : 'none';
+            });
+        });
+    }
+    
+    // ===== DEVICE INFO =====
+    if (document.getElementById('userOS')) {
+        // Browser detection
+        const userAgent = navigator.userAgent;
+        let browserName = 'Unknown';
+        
+        if (userAgent.includes("Firefox")) browserName = "Firefox";
+        else if (userAgent.includes("Safari")) browserName = "Safari";
+        else if (userAgent.includes("Chrome")) browserName = "Chrome";
+        else if (userAgent.includes("Edg")) browserName = "Edge";
+        
+        // OS detection
+        let osName = "Unknown";
+        if (userAgent.includes("Windows")) osName = "Windows";
+        else if (userAgent.includes("Mac")) osName = "macOS";
+        else if (userAgent.includes("Linux")) osName = "Linux";
+        else if (userAgent.includes("Android")) osName = "Android";
+        else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) osName = "iOS";
+        
+        // Update UI
+        document.getElementById('userBrowser').textContent = browserName;
+        document.getElementById('userOS').textContent = osName;
+        document.getElementById('userScreen').textContent = 
+            `${window.screen.width} × ${window.screen.height}`;
+        
+        // Get IP and location
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('userIP').textContent = data.ip || 'Unknown';
+                document.getElementById('userLocation').textContent = 
+                    `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
+            });
+        
+        // Connection info
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            document.getElementById('userConnection').textContent = 
+                `${connection.effectiveType} (${connection.downlink} Mbps)`;
         }
     }
 
