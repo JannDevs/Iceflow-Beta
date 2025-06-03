@@ -53,8 +53,18 @@
             </div>
             
             <div class="header-actions">
-                <div id="versionToast" class="version-toast" title="Current Version">
-                    v1.1.7
+                <div class="nav-toggle-container">
+                    <button id="navToggle" class="nav-toggle-btn" title="Quick Navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div id="navDropdown" class="nav-dropdown">
+                        <a href="/api/" class="nav-dropdown-link">
+                            <i class="fas fa-plug"></i> API Features
+                        </a>
+                        <a href="/stats/" class="nav-dropdown-link">
+                            <i class="fas fa-chart-line"></i> Statistics
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>
@@ -62,19 +72,29 @@
         <section class="hero-section">
             <div class="hero-content">
                 <h1 class="gradient-text">Iceflow API</h1>
-                <p class="hero-description">Unlock the power of seamless integration with our comprehensive Koyuki Iceflow API suite. Designed for developers, by developers.</p>
+                <p class="hero-description">
+                    Unlock the power of seamless integration with our comprehensive Koyuki Iceflow API suite. 
+                    Designed for developers, by developers. Our API provides robust, scalable solutions for 
+                    your application needs with 99.9% uptime and comprehensive documentation.
+                </p>
+                <p class="hero-description">
+                    With features ranging from user authentication to data analytics, our API suite is built
+                    with modern web standards and security best practices. Whether you're building a small
+                    project or enterprise application, Iceflow API has you covered.
+                </p>
             </div>
             
             <div class="hero-visual">
                 <div class="banner-container">
-                    <img class="banner" src="../src/banner.png" alt="Iceflow API">
+                    <img class="banner" src="../src/banner.png" alt="Iceflow API" loading="lazy">
                 </div>
                 
                 <div class="hero-actions">
-                    <a href="/dash/" class="btn btn-primary">
+                    <a href="/dash/" class="btn btn-primary btn-lg">
                         <i class="fas fa-rocket"></i> Get Started
                     </a>
-                    <a href="/docs/" class="btn btn-primary">
+                    <div class="action-spacer"></div>
+                    <a href="/docs/" class="btn btn-primary btn-lg">
                         <i class="fas fa-book"></i> Documentation
                     </a>
                 </div>
@@ -119,7 +139,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                Welcome to Iceflow API v1.1.7
+                Welcome to Iceflow API
             </div>
         </div>
     </div>
