@@ -165,7 +165,7 @@ axios.get('https://api.iceflow-beta.vercel.app/ai/koyuki', {
         
         <footer class="main-footer">
             <div class="footer-content">
-                <div class="copyright">© 2023 Iceflow API. All rights reserved.</div>
+                <div class="copyright">©️ 2023 Iceflow API. All rights reserved.</div>
                 
                 <div class="footer-middle">
                     <div class="theme-switcher">
@@ -195,20 +195,5 @@ axios.get('https://api.iceflow-beta.vercel.app/ai/koyuki', {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../script.js"></script>
-    <script>
-        // Tab switching functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons and samples
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.code-sample').forEach(s => s.classList.remove('active'));
-                
-                // Add active class to clicked button and corresponding sample
-                btn.classList.add('active');
-                const lang = btn.dataset.lang;
-                document.getElementById(`${lang}-example`).classList.add('active');
-            });
-        });
-    </script>
 </body>
 </html>
