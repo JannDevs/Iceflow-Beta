@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Modern API Documentation with Cool Interface">
     <link rel="icon" href="../../src/icon.png" type="image/png">
-    <title>Iceflow API - Documentation</title>
+    <title>Iceflow API - Statistics</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
@@ -201,7 +201,7 @@
         
         <footer class="main-footer">
             <div class="footer-content">
-                <div class="copyright">© 2023 Iceflow API. All rights reserved.</div>
+                <div class="copyright">©️ 2023 Iceflow API. All rights reserved.</div>
                 
                 <div class="footer-middle">
                     <div class="theme-switcher">
@@ -230,60 +230,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../script.js"></script>
-    <script>
-        // Update time and battery
-        function updateTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
-        }
-        
-        // Initialize charts
-        const ctx = document.getElementById('trafficChart').getContext('2d');
-        const trafficChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-                datasets: [{
-                    label: 'Requests',
-                    data: [1200, 1900, 3000, 5000, 2000, 3000],
-                    borderColor: 'var(--primary-color)',
-                    tension: 0.1,
-                    fill: true,
-                    backgroundColor: 'rgba(108, 92, 231, 0.1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Simulate battery level
-        function updateBattery() {
-            const batteryLevel = Math.floor(Math.random() * 30) + 20; // Random between 20-50%
-            document.getElementById('batteryLevel').textContent = `${batteryLevel}%`;
-        }
-        
-        // Initial calls
-        updateTime();
-        updateBattery();
-        
-        // Update time every minute
-        setInterval(updateTime, 60000);
-        // Update battery every 5 minutes
-        setInterval(updateBattery, 300000);
-    </script>
 </body>
 </html>
