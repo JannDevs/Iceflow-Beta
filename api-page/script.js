@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         itemCol.dataset.name = item.name.toLowerCase();
                         itemCol.dataset.desc = item.desc.toLowerCase();
                         itemCol.dataset.category = category.name.toLowerCase().replace(/\s+/g, '-');
-                        itemCol.style.animationDelay = `${index * 0.05 + 0.3}s';
+                        itemCol.style.animationDelay = `${index * 0.05 + 0.3}s`;
                         
                         const apiCard = document.createElement('div');
                         apiCard.className = 'api-card';
