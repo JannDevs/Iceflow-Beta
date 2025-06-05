@@ -30,6 +30,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Initialize API content if on API page
         if (window.location.pathname.includes('/api/')) {
             loadAPIContent();
+            setupAPISearch();
+        }
+        
+        // Initialize docs page
+        if (window.location.pathname.includes('/docs/')) {
+            setupCopyButtons();
+        }
+        
+        // Initialize stats page
+        if (window.location.pathname.includes('/stats/')) {
+            initStatsPage();
         }
     });
 
@@ -43,6 +54,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         if (window.location.pathname.includes('/api/')) {
             loadAPIContent();
+            setupAPISearch();
+        }
+        
+        if (window.location.pathname.includes('/docs/')) {
+            setupCopyButtons();
+        }
+        
+        if (window.location.pathname.includes('/stats/')) {
+            initStatsPage();
         }
     }, 3000);
     
@@ -59,34 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Close dropdown when clicking outside
         document.addEventListener('click', () => {
             navDropdown.classList.remove('show');
-        });
-    }
-    
-    // ===== SIDEBAR TOGGLE =====
-    const menuToggle = document.querySelector('.menu-toggle');
-    const sideNav = document.querySelector('.side-nav');
-    const navCollapseBtn = document.querySelector('.nav-collapse-btn');
-    
-    if (menuToggle && sideNav) {
-        menuToggle.addEventListener('click', () => {
-            sideNav.classList.toggle('active');
-        });
-        
-        // Close side nav when clicking outside on mobile
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth < 992 && 
-                !e.target.closest('.side-nav') && 
-                !e.target.closest('.menu-toggle') && 
-                sideNav.classList.contains('active')) {
-                sideNav.classList.remove('active');
-            }
-        });
-    }
-    
-    if (navCollapseBtn) {
-        navCollapseBtn.addEventListener('click', () => {
-            sideNav.classList.toggle('collapsed');
-            document.querySelector('.main-wrapper').classList.toggle('nav-collapsed');
         });
     }
     
@@ -123,7 +115,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const lazyImage = entry.target;
                     lazyImage.classList.add('loaded');
                     
-                    // If the image hasn't loaded yet, force load
                     if (!lazyImage.complete) {
                         lazyImage.onload = () => {
                             lazyImage.classList.add('loaded');
@@ -170,6 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const categoryElement = document.createElement('div');
                     categoryElement.className = 'category-section';
                     categoryElement.style.animationDelay = `${categoryIndex * 0.2}s`;
+                    categoryElement.dataset.category = category.name.toLowerCase().replace(/\s+/g, '-');
                     
                     const categoryHeader = document.createElement('h3');
                     categoryHeader.className = 'category-header';
@@ -190,10 +182,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     sortedItems.forEach((item, index) => {
                         const itemCol = document.createElement('div');
                         itemCol.className = 'col-md-6 col-lg-4 api-item';
-                        itemCol.dataset.name = item.name;
-                        itemCol.dataset.desc = item.desc;
-                        itemCol.dataset.category = category.name;
-                        itemCol.style.animationDelay = `${index * 0.05 + 0.3}s`;
+                        itemCol.dataset.name = item.name.toLowerCase();
+                        itemCol.dataset.desc = item.desc.toLowerCase();
+                        itemCol.dataset.category = category.name.toLowerCase().replace(/\s+/g, '-');
+                        itemCol.style.animationDelay = `${index * 0.05 + 0.3}s';
                         
                         const apiCard = document.createElement('div');
                         apiCard.className = 'api-card';
@@ -305,6 +297,161 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // ===== API SEARCH FUNCTIONALITY =====
+    function setupAPISearch() {
+        const searchInput = document.getElementById('apiSearch');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        if (!searchInput) return;
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const apiItems = document.querySelectorAll('.api-item');
+            
+            apiItems.forEach(item => {
+                const name = item.dataset.name;
+                const desc = item.dataset.desc;
+                const category = item.dataset.category;
+                
+                if (name.includes(searchTerm) || desc.includes(searchTerm) || category.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show/hide category headers based on visible items
+            document.querySelectorAll('.category-section').forEach(section => {
+                const hasVisibleItems = Array.from(section.querySelectorAll('.api-item'))
+                    .some(item => item.style.display !== 'none');
+                
+                section.style.display = hasVisibleItems ? '' : 'none';
+            });
+            
+            // Show/hide clear button
+            clearSearch.style.display = searchTerm ? 'block' : 'none';
+        });
+        
+        clearSearch.addEventListener('click', function() {
+            searchInput.value = '';
+            searchInput.dispatchEvent(new Event('input'));
+            this.style.display = 'none';
+            searchInput.focus();
+        });
+    }
+
+    // ===== DOCS PAGE FUNCTIONALITY =====
+    function setupCopyButtons() {
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const targetElement = document.getElementById(targetId);
+                const textToCopy = targetElement.textContent;
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+        });
+        
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and samples
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.code-sample').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding sample
+                btn.classList.add('active');
+                const lang = btn.dataset.lang;
+                document.getElementById(`${lang}-example`).classList.add('active');
+            });
+        });
+    }
+
+    // ===== STATS PAGE FUNCTIONALITY =====
+    function initStatsPage() {
+        if (!document.getElementById('currentTime')) return;
+        
+        // Update time and battery
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+        }
+        
+        // Simulate battery level
+        function updateBattery() {
+            const batteryLevel = Math.floor(Math.random() * 30) + 20; // Random between 20-50%
+            document.getElementById('batteryLevel').textContent = `${batteryLevel}%`;
+        }
+        
+        // Initialize traffic chart
+        if (typeof Chart !== 'undefined') {
+            const ctx = document.getElementById('trafficChart').getContext('2d');
+            const trafficChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    datasets: [{
+                        label: 'Requests',
+                        data: [1200, 1900, 3000, 5000, 2000, 3000, 2400],
+                        borderColor: 'var(--primary-color)',
+                        backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'var(--border-color)'
+                            },
+                            ticks: {
+                                color: 'var(--text-muted)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'var(--border-color)'
+                            },
+                            ticks: {
+                                color: 'var(--text-muted)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initial calls
+        updateTime();
+        updateBattery();
+        
+        // Update time every minute
+        setInterval(updateTime, 60000);
+        // Update battery every 5 minutes
+        setInterval(updateBattery, 300000);
+    }
+
     // ===== TOAST NOTIFICATION =====
     const showToast = (message, type = 'info') => {
         const toast = document.getElementById('notificationToast');
@@ -347,89 +494,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => {
         showToast('Welcome to Iceflow API');
     }, 1500);
-
-    // ===== DEVICE INFO =====
-    if (document.getElementById('userOS')) {
-        // Browser detection
-        const userAgent = navigator.userAgent;
-        let browserName = 'Unknown';
-        
-        if (userAgent.includes("Firefox")) browserName = "Firefox";
-        else if (userAgent.includes("Safari")) browserName = "Safari";
-        else if (userAgent.includes("Chrome")) browserName = "Chrome";
-        else if (userAgent.includes("Edg")) browserName = "Edge";
-        
-        // OS detection
-        let osName = "Unknown";
-        if (userAgent.includes("Windows")) osName = "Windows";
-        else if (userAgent.includes("Mac")) osName = "macOS";
-        else if (userAgent.includes("Linux")) osName = "Linux";
-        else if (userAgent.includes("Android")) osName = "Android";
-        else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) osName = "iOS";
-        
-        // Update UI
-        document.getElementById('userBrowser').textContent = browserName;
-        document.getElementById('userOS').textContent = osName;
-        document.getElementById('userScreen').textContent = 
-            `${window.screen.width} × ${window.screen.height}`;
-        
-        // Get IP and location
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('userIP').textContent = data.ip || 'Unknown';
-                document.getElementById('userLocation').textContent = 
-                    `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
-            });
-        
-        // Connection info
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (connection) {
-            document.getElementById('userConnection').textContent = 
-                `${connection.effectiveType} (${connection.downlink} Mbps)`;
-        }
-    }
-
-    // ===== STATS PAGE FUNCTIONALITY =====
-    if (document.getElementById('currentTime')) {
-        // Update time and battery
-        function updateTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
-        }
-        
-        // Simulate battery level
-        function updateBattery() {
-            const batteryLevel = Math.floor(Math.random() * 30) + 20; // Random between 20-50%
-            document.getElementById('batteryLevel').textContent = `${batteryLevel}%`;
-        }
-        
-        // Initial calls
-        updateTime();
-        updateBattery();
-        
-        // Update time every minute
-        setInterval(updateTime, 60000);
-        // Update battery every 5 minutes
-        setInterval(updateBattery, 300000);
-    }
-
-    // ===== DOCS PAGE FUNCTIONALITY =====
-    if (document.querySelector('.tab-btn')) {
-        // Tab switching functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons and samples
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.code-sample').forEach(s => s.classList.remove('active'));
-                
-                // Add active class to clicked button and corresponding sample
-                btn.classList.add('active');
-                const lang = btn.dataset.lang;
-                document.getElementById(`${lang}-example`).classList.add('active');
-            });
-        });
-    }
 });
