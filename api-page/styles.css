@@ -1131,208 +1131,6 @@ input:checked + .slider:before {
     font-size: 14px;
 }
 
-/* === BADGE === */
-.badge-pill {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    border-radius: 100px;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
-    white-space: nowrap;
-}
-
-/* === ANIMATIONS === */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideInUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideInRight {
-    from { transform: translateX(20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideInLeft {
-    from { transform: translateX(-20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes dash {
-    0% {
-        stroke-dasharray: 1, 200;
-        stroke-dashoffset: 0;
-    }
-    50% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -35;
-    }
-    100% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -124;
-    }
-}
-
-@keyframes rotate-spinner {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* === RESPONSIVE STYLES === */
-@media (max-width: 1200px) {
-    .hero-section {
-        flex-direction: column;
-        padding: 60px 30px;
-    }
-    
-    .hero-content {
-        max-width: 100%;
-        margin-bottom: 40px;
-    }
-    
-    .hero-visual {
-        width: 100%;
-    }
-    
-    .banner-container {
-        width: 90%;
-        margin: 0 auto;
-    }
-}
-
-@media (max-width: 992px) {
-    .main-wrapper {
-        margin-left: 0;
-    }
-    
-    .side-nav {
-        transform: translateX(-100%);
-    }
-    
-    .side-nav.active {
-        transform: translateX(0);
-    }
-    
-    .menu-toggle {
-        display: block;
-    }
-    
-    .api-section, .hero-section, .docs-section {
-        padding: 40px 20px;
-    }
-    
-    .dashboard-section {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 30px 20px;
-    }
-    
-    .hero-actions {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .hero-actions a {
-        width: 100%;
-    }
-    
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .log-details {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 5px;
-    }
-}
-
-@media (max-width: 576px) {
-    .main-header {
-        padding: 0 15px;
-    }
-    
-    .hero-section {
-        padding: 30px 15px;
-    }
-    
-    .api-section, .docs-section {
-        padding: 30px 15px;
-    }
-    
-    .section-title {
-        font-size: 1.8rem;
-    }
-    
-    .section-description {
-        font-size: 1rem;
-    }
-    
-    .toast-container {
-        left: 20px;
-        right: 20px;
-    }
-    
-    .toast {
-        min-width: unset;
-        width: calc(100% - 40px);
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .language-tabs {
-        justify-content: center;
-    }
-}
-
 /* === NEW STYLES FOR UPDATED COMPONENTS === */
 
 /* Header with version badge */
@@ -1560,4 +1358,206 @@ input:checked + .slider:before {
     height: 4px;
     background: linear-gradient(to right, var(--primary-color), var(--accent-color));
     border-radius: 4px;
+}
+
+/* === BADGE === */
+.badge-pill {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 100px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+    white-space: nowrap;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124;
+    }
+}
+
+@keyframes rotate-spinner {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* === RESPONSIVE STYLES === */
+@media (max-width: 1200px) {
+    .hero-section {
+        flex-direction: column;
+        padding: 60px 30px;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: 40px;
+    }
+    
+    .hero-visual {
+        width: 100%;
+    }
+    
+    .banner-container {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-wrapper {
+        margin-left: 0;
+    }
+    
+    .side-nav {
+        transform: translateX(-100%);
+    }
+    
+    .side-nav.active {
+        transform: translateX(0);
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+    
+    .api-section, .hero-section, .docs-section {
+        padding: 40px 20px;
+    }
+    
+    .dashboard-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 30px 20px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .hero-actions a {
+        width: 100%;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .log-details {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-header {
+        padding: 0 15px;
+    }
+    
+    .hero-section {
+        padding: 30px 15px;
+    }
+    
+    .api-section, .docs-section {
+        padding: 30px 15px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .section-description {
+        font-size: 1rem;
+    }
+    
+    .toast-container {
+        left: 20px;
+        right: 20px;
+    }
+    
+    .toast {
+        min-width: unset;
+        width: calc(100% - 40px);
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .language-tabs {
+        justify-content: center;
+    }
 }
